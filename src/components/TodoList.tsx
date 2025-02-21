@@ -1,36 +1,34 @@
 import { todoTypes } from "../types/todoTypes"
-import TodoItem from "./TodoItem";
+import TodoItem from "./TodoItem"
 
 interface TodoListProps {
-  todos:todoTypes[];
-  setCompletedTodos: (id:number, completed:boolean) => void;
-  onDelete: (id:number) => void;
+  todos: todoTypes[];
+  toggleChecked: (id:number, completed:boolean) => void;
+  deleteTodo: (id:number) => void;
 }
 
-
-export default function TodoList({todos, setCompletedTodos, onDelete}: TodoListProps) {
+export default function TodoList({todos, toggleChecked,deleteTodo}: TodoListProps) {
 
   const sortedTodos = todos.sort((a,b) => {
     if(a.completed === b.completed){
-      return b.id - a.id
+      return b.id - a.id;
     }
+
     return a.completed ? 1 : -1
   })
 
   return (
-    <div className="space-y-2 p-5 border rounded-md border-gray-200">
+    <div className="border-1 border-slate-300 bg-blue-50 rounded-md p-4 space-y-2">
       {sortedTodos.map((todo) => (
-        <TodoItem
+        <TodoItem 
           key={todo.id}
-          todos={todo}
-          setCompletedTodos={setCompletedTodos}
-          onDelete={onDelete}
+          todo={todo}
+          toggleChecked={toggleChecked}
+          deleteTodo={deleteTodo}
         />
       ))}
 
-      {todos.length <= 0 && (
-        <p>Add more todos!</p>
-      )}
+      {sortedTodos.length <= 0 ? <p>Congratulations, all todos have been accomplished</p> : ""}
     </div>
   )
 }
